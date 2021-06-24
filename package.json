@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "npm run lint && node ./bin/www",
+    "start": "npm run lint && nodemon ./src/app.js",
     "lint": "eslint --fix --ext .js ./src",
     "commit": "cz"
   },
@@ -13,7 +13,9 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "mongodb": "^3.6.9",
+    "morgan": "~1.9.1",
+    "nodemon": "^2.0.7"
   },
   "devDependencies": {
     "commitizen": "^4.2.4",
@@ -21,7 +23,8 @@
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prefer-arrow": "^1.2.3",
-    "eslint-plugin-prettier": "^3.4.0"
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.1"
   },
   "config": {
     "commitizen": {
