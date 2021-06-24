@@ -1,25 +1,17 @@
-const database = {}
+const mongoose = require('mongoose');
 
-var DATABASE_URL = process.env.DATABASE_URL || 'http://localhost'
+const database = {};
+
+var DATABASE_URL = process.env.DATABASE_URL || 'app.morse-messenger.com';
 
 database.connect = async () => {
-    /**
- * Import MongoClient & connexion à la DB
- */
-  const MongoClient = require('mongodb').MongoClient;
-  const url = `mongodb://devroot:devroot@${DATABASE_URL}/`;
-  const dbName = 'cesi-eat';
-  let db
-  MongoClient.connect(url, { useUnifiedTopology: true, useNewUrlParser: true })
-  .then((client) => {
-    console.log("Connected successfully to MongoDB Server");
-    db = client.db(dbName);
-    database.db = db
-  })
-  .catch((err) => {
+  const url = `mongodb://${DATABASE_URL}/cesieat`;
+  console.log('url: ', url);
+  await mongoose.connect(url, { useUnifiedTopology: true, useNewUrlParser: true }).catch((err) => {
     console.log('Exiting from thrown error', err);
     process.exit(1);
-  })
-}
+  });
+  database.db = mongoose.connection;
+};
 
-module.exports = database
+module.exports = database;
