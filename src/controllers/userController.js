@@ -1,10 +1,11 @@
 const User = require('../models/User');
 const userController = {};
+const sqlC = require('../services/sqlConnector.js');
 
 userController.getAll = async (req, res) => {
   try {
-    const users = await User.find({});
-    res.status(200).json(users);
+    sqlC.getUser()
+    res.send("good old bitches");
   } catch (err) {
     console.log(err);
     throw err;
