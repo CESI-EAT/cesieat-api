@@ -13,3 +13,5 @@ jobs:
           context: .
           push: true
           tags: cesieat/node-api:latest
+          secrets: |
+            GIT_AUTH_TOKEN=${{ secrets.MYTOKEN }}
