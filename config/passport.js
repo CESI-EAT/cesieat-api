@@ -21,7 +21,7 @@ const options = {
 };
 
 const strategy = new JWTstrategy(options, (payload, done) => {
-  User.findOne({ email: payload.sub })
+  User.findOne({ where: { email: payload.sub } })
     .then((user) => {
       if (user) {
         return done(null, user);
