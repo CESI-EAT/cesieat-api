@@ -1,15 +1,10 @@
 const User = require('../models/User');
 const userController = {};
-const { getRequest } = require('../services/sqlConnector.js');
 
 userController.getAll = async (req, res) => {
   try {
-    getRequest().query('select * from Users', function (err, result) {
-      if (err) console.log(err);
-      // send records as a response
-      console.log(result);
-      res.send(result.recordset);
-    });
+    const users = await User.findAll();
+    res.status(200).json(users);
   } catch (err) {
     console.log(err);
     throw err;
@@ -18,12 +13,9 @@ userController.getAll = async (req, res) => {
 
 userController.getOneById = async (req, res) => {
   try {
-    getRequest().query('select * from UserView WHERE Id=' + req.params.id, function (err, result) {
-      if (err) console.log(err);
-      // send records as a response
-      console.log(result);
-      res.send(result.recordset);
-    });
+    const user = User.findOne({ where: { id: req.params.id } });
+    if (user === null) res.status(401).json({ success: false, message: 'User not found !' });
+    res.status(200).json(user);
   } catch (err) {
     console.log(err);
     throw err;
@@ -32,11 +24,9 @@ userController.getOneById = async (req, res) => {
 
 userController.addUser = async (req, res) => {
   try {
-    //TODO: SQL request
-    getRequest().query('delete * from Users WHERE Id=' + req.params.id, function (err, result) {
-      if (err) console.log(err);
-      res.send('coucou');
-    });
+    const user = await User.create(req.body);
+
+    res.status(200).json({ success: true, user });
   } catch (err) {
     console.log(err);
     throw err;
@@ -45,10 +35,8 @@ userController.addUser = async (req, res) => {
 
 userController.deleteById = async (req, res) => {
   try {
-    getRequest().query('delete * from Users WHERE Id=' + req.params.id, function (err, result) {
-      if (err) console.log(err);
-      res.send('user deleted');
-    });
+    await User.destroy({ where: { id: req.params.id } });
+    res.status(200).json({ success: true, message: 'Deleted with success' });
   } catch (err) {
     console.log(err);
     throw err;

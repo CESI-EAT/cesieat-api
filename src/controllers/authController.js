@@ -3,8 +3,9 @@ const User = require('../models/User');
 const authController = {};
 
 authController.register = async (req, res, next) => {
-  const { email, password } = req.body;
-  User.create({ email, password })
+  const { password } = req.body;
+  const password_hashed = await utils.hashString(password);
+  User.create({ ...req.body, password: password_hashed })
     .then((user) => {
       const jwt = utils.createJWT(user);
       res.json({
@@ -19,23 +20,23 @@ authController.register = async (req, res, next) => {
 
 authController.login = async (req, res, next) => {
   const { email, password } = req.body;
-  await User.findOne({ email: email })
-    .then(async (user) => {
-      if (!user) {
-        res.status(401).json({ success: false, message: 'Could not find user' });
-      }
+  try {
+    const user = await User.scope('withPassword').findOne({ where: { email: email } });
+    if (user === null) {
+      res.status(401).json({ success: false, message: 'Could not find user' });
+    }
 
-      const isValid = await user.isValidPassword(password);
-
-      if (isValid) {
-        const jwt = utils.createJWT(user);
-        res.cookie('jwt', jwt.token, { httpOnly: true, maxAge: jwt.expires });
-        res.status(200).json({ success: true, token: jwt.token, expiresIn: jwt.expires });
-      } else {
-        res.status(401).json({ success: false, message: 'Your entered the wrong password' });
-      }
-    })
-    .catch((err) => next(err));
+    const isValid = await utils.compareStringWithHash(password, user.password);
+    if (isValid) {
+      const jwt = utils.createJWT(user);
+      res.cookie('jwt', jwt.token, { httpOnly: true, maxAge: jwt.expires });
+      res.status(200).json({ success: true, token: jwt.token, expiresIn: jwt.expires });
+    } else {
+      res.status(401).json({ success: false, message: 'Your entered the wrong password' });
+    }
+  } catch (err) {
+    return next(err);
+  }
 };
 
 authController.logout = async (req, res, next) => {
