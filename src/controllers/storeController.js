@@ -49,7 +49,7 @@ storeController.findStore = async (req, res) => {
 
 storeController.updateStore = async (req, res) => {
   try {
-    const store = await Store.findByIdAndUpdate(req.params.id, req.body);
+    const store = await Store.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.status(200).json({ success: true, store: store });
   } catch (err) {
     res.status('401').json({ success: false, message: err.message });

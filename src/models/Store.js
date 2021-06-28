@@ -40,6 +40,9 @@ const StoreSchema = new Schema({
     type: String,
     required: true,
   },
+  categories: {
+    type: Array,
+  },
 });
 
 const StoreModel = mongoose.model('store', StoreSchema);
