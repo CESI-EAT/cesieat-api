@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "npm run lint && nodemon ./src/app.js",
+    "start": "npm run lint && node ./src/app.js",
+    "dev": "npm run lint && nodemon ./src/app.js",
     "lint": "eslint --fix --ext .js ./src",
     "commit": "cz"
   },
