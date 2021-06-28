@@ -3,8 +3,17 @@ const storeController = {};
 
 storeController.findAll = async (req, res) => {
   try {
-    const stores = await Store.find();
-    res.status(200).json(stores);
+    if (req.query && req.query.search) {
+      const regex = new RegExp(`${req.query.search}`, 'i');
+      const store = await Store.find({
+        $or: [{ name: regex }, { address: regex }, { city: regex }, { postalCode: regex }],
+      }).exec();
+      console.log(regex);
+      res.status(200).json(store);
+    } else {
+      const stores = await Store.find();
+      res.status(200).json(stores);
+    }
   } catch (err) {
     res.status('401').json({ success: false, message: err.message });
   }
