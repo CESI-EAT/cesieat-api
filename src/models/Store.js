@@ -43,6 +43,9 @@ const StoreSchema = new Schema({
   categories: {
     type: Array,
   },
+  tags: {
+    type: Array,
+  },
 });
 
 const StoreModel = mongoose.model('store', StoreSchema);
