@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../controllers/userController');
 const router = express.Router();
+const { convertImage } = require('../middlewares/images.middleware');
 
 /* GET users listing. */
 router.get('/', userController.getAll);
@@ -9,7 +10,7 @@ router.get('/', userController.getAll);
 router.get('/:id', userController.getOneById);
 
 /* Create one new user */
-router.post('/', userController.addUser);
+router.post('/', convertImage, userController.addUser);
 
 /* Delete one user based on ID */
 router.delete('/:id', userController.deleteById);
