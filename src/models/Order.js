@@ -2,14 +2,6 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const orderState = {
-  REQUESTED: 'requested',
-  ACCEPTED: 'accepted',
-  PREPARED: 'prepared',
-  DELIVERY: 'delivery',
-  DELIVERED: 'delivered',
-};
-
 const OrderSchema = new Schema({
   userId: {
     type: Number,

@@ -8,6 +8,9 @@ router.get('/', orderController.findAll);
 /* POST order. */
 router.post('/', orderController.createOrder);
 
+/* POST, validate current status order and set next one. */
+router.post('/:id/validate', orderController.validateStatus);
+
 /* GET order by id. */
 router.get('/:id', orderController.findOrder);
 
