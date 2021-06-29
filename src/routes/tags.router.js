@@ -1,5 +1,5 @@
 const express = require('express');
-const tagController = require('../controllers/tagController');
+const tagController = require('../controllers/tags.controller');
 const router = express.Router();
 
 /* GET tag listing. */
