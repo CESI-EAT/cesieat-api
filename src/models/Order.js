@@ -1,3 +1,4 @@
+const { ObjectID } = require('mongodb');
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
@@ -9,12 +10,13 @@ const OrderSchema = new Schema({
     unique: false,
   },
   storeId: {
-    type: Number,
+    type: ObjectID,
     required: true,
     unique: false,
   },
   deliveryManId: {
     type: Number,
+    unique: false,
   },
   status: {
     type: String,
