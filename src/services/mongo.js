@@ -10,7 +10,6 @@ database.connect = async () => {
     console.log('Exiting from thrown error', err);
     process.exit(1);
   });
-  console.log('MONGO connected !');
   database.db = mongoose.connection;
 };
 
