@@ -42,15 +42,14 @@ storeController.findStore = async (req, res) => {
     const store = await Store.findById(req.params.id);
     res.status(200).json(store);
   } catch (err) {
-    console.log(err);
-    throw err;
+    res.status(401).json({ success: false, message: err.message });
   }
 };
 
 storeController.updateStore = async (req, res) => {
   try {
     const store = await Store.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.status(200).json({ success: true, store: store });
+    res.status(200).json({ success: true, store });
   } catch (err) {
     res.status(401).json({ success: false, message: err.message });
   }

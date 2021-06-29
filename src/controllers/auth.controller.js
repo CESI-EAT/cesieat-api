@@ -40,7 +40,7 @@ authController.login = async (req, res, next) => {
 };
 
 authController.logout = async (req, res, next) => {
-  await Log.create({ type: 'Connected', userId: req.user.id });
+  await Log.create({ type: 'Disconnected', userId: req.user.id });
   res.cookie('jwt', '', { maxAge: 1 });
   res.status(200).json({ success: true, message: 'Bye bye' });
 };
