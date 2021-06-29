@@ -1,5 +1,5 @@
 const utils = require('../services/utils');
-const User = require('../models/User');
+const { User, Role } = require('../models');
 const authController = {};
 
 authController.register = async (req, res, next) => {
@@ -30,9 +30,9 @@ authController.login = async (req, res, next) => {
     if (isValid) {
       const jwt = utils.createJWT(user);
       res.cookie('jwt', jwt.token, { httpOnly: true, maxAge: jwt.expires });
-      res.status(200).json({ success: true, token: jwt.token, expiresIn: jwt.expires });
+      res.status(200).json({ success: true, message: 'You are login !' });
     } else {
-      res.status(401).json({ success: false, message: 'Your entered the wrong password' });
+      res.status(401).json({ success: false, message: 'Your entered the wrong password !' });
     }
   } catch (err) {
     return next(err);
@@ -45,10 +45,11 @@ authController.logout = async (req, res, next) => {
 };
 
 authController.getProfile = async (req, res, next) => {
-  res.json({
-    success: true,
-    user: req.user,
+  const user = await User.findOne({
+    where: { id: req.user.id },
+    include: [{ model: Role, as: 'role' }],
   });
+  res.json(user);
 };
 
 module.exports = authController;

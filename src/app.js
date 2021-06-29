@@ -6,13 +6,14 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const routes = require('./routes');
-const sql = require('./services/sql');
+const sql = require('./models');
 const mongo = require('./services/mongo');
 require('../config/passport')(passport);
 
 const app = express();
 var corsOptions = {
-  origin: 'http://localhost:8080',
+  origin: ['https://localhost:9377', 'https://app.morse-messenger.com'],
+  credentials: true,
 };
 app.use(cors(corsOptions));
 app.use(logger('dev'));
@@ -37,11 +38,10 @@ app.use((err, req, res) => {
   res.status(err.status || 500).json({ success: false, message: err.message });
 });
 
-app.listen(3000, function () {
-  console.log('Server is running on port 3000');
+app.listen(3000, async () => {
+  await sql.sequelize.sync({ force: false, logging: console.log });
+  await mongo.connect();
+  console.log('Databases connected !');
 });
-
-mongo.connect();
-sql.connect();
 
 module.exports = app;

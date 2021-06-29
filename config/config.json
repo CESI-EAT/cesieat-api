@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "Admin",
+    "password": "poiuytr",
+    "database": "CESIEAT",
+    "host": "sql.morse-messenger.com",
+    "dialect": "mssql"
+  },
+  "test": {
+    "username": "Admin",
+    "password": "poiuytr",
+    "database": "CESIEAT",
+    "host": "sql.morse-messenger.com",
+    "dialect": "mssql"
+  },
+  "production": {
+    "username": "Admin",
+    "password": "poiuytr",
+    "database": "CESIEAT",
+    "host": "sql.morse-messenger.com",
+    "dialect": "mssql"
+  }
+}

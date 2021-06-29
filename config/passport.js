@@ -1,8 +1,5 @@
-const passport = require('passport');
-const path = require('path');
-const fs = require('fs');
 const JWTstrategy = require('passport-jwt').Strategy;
-const User = require('../src/models/User');
+const { User } = require('../src/models');
 
 /*const pathToKey = path.join(__dirname, '..', 'id_rsa_pub_pem');
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');*/
