@@ -21,7 +21,7 @@ authController.login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = await User.scope('withPassword').findOne({ where: { email: email } });
-    if (user === null) {
+    if (!user) {
       res.status(401).json({ success: false, message: 'Could not find user' });
     }
 
