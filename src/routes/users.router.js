@@ -31,15 +31,20 @@ const { convertImage } = require('../middlewares/images.middleware');
  *                         description: tag's name
  *                         example: italien
  */
-router.get('/', userController.getAll);
+router.get('/', userController.findAll);
 
 /* GET on user by it's ID */
-router.get('/:id', userController.getOneById);
+router.get('/:id', userController.findUser);
 
-/* Create one new user */
-router.post('/', convertImage, userController.addUser);
+/* GET on user by it's ID */
+router.get('/:id/orders', userController.getOrders);
+
+router.post('/', convertImage, userController.createUser);
+
+/* Update user */
+router.patch('/', userController.updateUser);
 
 /* Delete one user based on ID */
-router.delete('/:id', userController.deleteById);
+router.delete('/:id', userController.deleteUser);
 
 module.exports = router;

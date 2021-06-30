@@ -48,12 +48,12 @@ const compareStringWithHash = async (str, hash) =>
  * @param {*} user - The user object.  We need this to set the JWT `sub` payload property to the MongoDB user ID
  */
 function createJWT(user) {
-  const email = user.email;
+  const id = user.id;
 
   const expiresIn = 3 * 24 * 60 * 60;
 
   const payload = {
-    sub: email,
+    sub: id,
     iat: Date.now(),
   };
 

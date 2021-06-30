@@ -1,5 +1,5 @@
 const express = require('express');
-const storeController = require('../controllers/storeController');
+const storeController = require('../controllers/stores.controller');
 const router = express.Router();
 const { convertImage } = require('../middlewares/images.middleware');
 
