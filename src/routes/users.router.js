@@ -9,6 +9,9 @@ router.get('/', userController.findAll);
 /* GET on user by it's ID */
 router.get('/:id', userController.findUser);
 
+/* GET on user by it's ID */
+router.get('/:id/orders', userController.getOrders);
+
 router.post('/', convertImage, userController.createUser);
 
 /* Update user */

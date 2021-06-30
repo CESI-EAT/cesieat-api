@@ -1,4 +1,5 @@
 const { User } = require('../models');
+const Order = require('../models/Order');
 const userController = {};
 
 userController.findAll = async (req, res) => {
@@ -16,6 +17,22 @@ userController.findUser = async (req, res) => {
     const user = await User.findOne({ where: { id: req.params.id } });
     if (user === null) res.status(401).json({ success: false, message: 'User not found !' });
     res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+userController.getOrders = async (req, res) => {
+  try {
+    const user = await User.findOne({ where: { id: req.params.id } });
+    if (user === null) res.status(401).json({ success: false, message: 'User not found !' });
+
+    const orders = await Order.find({
+      $or: [{ userId: req.params.id }, { deliveryManId: req.params.id }],
+    }).exec();
+
+    res.status(200).json(orders);
   } catch (err) {
     console.log(err);
     throw err;
