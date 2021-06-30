@@ -26,6 +26,8 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "sequelize": "^6.6.4",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6",
     "tedious": "^11.0.9"
   },
   "devDependencies": {
