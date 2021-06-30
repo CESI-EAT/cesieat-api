@@ -102,7 +102,7 @@ router.post('/', orderController.createOrder);
  * /orders/{id}:
  *   post:
  *     summary: Retrieve a single order and modify it's status to the next step.
- *     description: retrieve the order with it's ID then "increment" it's status following that order : 'REQUESTED'>'ACCEPTED'>'PREPARED'>'DELIVERY'>'DELIVERED'
+ *     description: retrieve the order with it's ID then "increment" it's status following that order REQUESTED>ACCEPTED>PREPARED>DELIVERY>DELIVERED
  *     parameters:
  *       - in: path
  *         name: id
