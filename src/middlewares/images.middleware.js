@@ -21,7 +21,7 @@ const convertImage = async (req, res, next) => {
         next();
       });
   } else {
-    next;
+    next();
   }
 };
 

@@ -10,7 +10,26 @@ const sql = require('./models');
 const mongo = require('./services/mongo');
 require('../config/passport')(passport);
 
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDefinition = {
+  openapi: '3.0.0',
+  info: {
+    title: 'Express API for CESI Eat',
+    description: 'This API is made to work with the front end application CESI Eat',
+    version: '1.0.0',
+  },
+};
+
 const app = express();
+
+const options = {
+  swaggerDefinition,
+  // Paths to files containing OpenAPI definitions
+  apis: ['./src/routes/*.js'],
+};
+const swaggerSpec = swaggerJSDoc(options);
+
 var corsOptions = {
   origin: [
     'https://localhost:9377',
@@ -28,6 +47,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use(passport.initialize());
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
