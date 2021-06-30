@@ -21,7 +21,7 @@ authController.login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = await User.scope('withPassword').findOne({ where: { email: email } });
-    if (user === null) {
+    if (!user) {
       res.status(401).json({ success: false, message: 'Could not find user' });
     }
 
@@ -36,7 +36,18 @@ authController.login = async (req, res, next) => {
       });
       res.status(200).json({ success: true, message: 'You are login !' });
     } else {
-      res.status(401).json({ success: false, message: 'Your entered the wrong password !' });
+      const isValid = await utils.compareStringWithHash(password, user.password);
+      if (isValid) {
+        const jwt = utils.createJWT(user);
+        await Log.create({ type: 'Connected', userId: user.id });
+        res.cookie('jwt', jwt.token, {
+          httpOnly: true,
+          maxAge: jwt.expires,
+        });
+        res.status(200).json({ success: true, message: 'You are login !' });
+      } else {
+        res.status(401).json({ success: false, message: 'Your entered the wrong password !' });
+      }
     }
   } catch (err) {
     return next(err);
