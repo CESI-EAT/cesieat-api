@@ -8,7 +8,7 @@ authController.register = async (req, res, next) => {
   User.create({ ...req.body, password: password_hashed })
     .then((user) => {
       const jwt = utils.createJWT(user);
-      res.cookie('jwt', jwt.token, { httpOnly: true, maxAge: jwt.expires });
+      res.cookie('jwt', jwt.token, { maxAge: jwt.expires });
       res.json({
         success: true,
         user,
@@ -29,7 +29,11 @@ authController.login = async (req, res, next) => {
     if (isValid) {
       const jwt = utils.createJWT(user);
       await Log.create({ type: 'Connected', userId: user.id });
-      res.cookie('jwt', jwt.token, { httpOnly: true, maxAge: jwt.expires });
+      res.cookie('jwt', jwt.token, {
+        maxAge: jwt.expires,
+        SameSite: 'none',
+        secure: true,
+      });
       res.status(200).json({ success: true, message: 'You are login !' });
     } else {
       res.status(401).json({ success: false, message: 'Your entered the wrong password !' });

@@ -13,7 +13,7 @@ userController.findAll = async (req, res) => {
 
 userController.findUser = async (req, res) => {
   try {
-    const user = User.findOne({ where: { id: req.params.id } });
+    const user = await User.findOne({ where: { id: req.params.id } });
     if (user === null) res.status(401).json({ success: false, message: 'User not found !' });
     res.status(200).json(user);
   } catch (err) {
