@@ -23,6 +23,7 @@ authController.login = async (req, res, next) => {
     const user = await User.scope('withPassword').findOne({ where: { email: email } });
     if (!user) {
       res.status(401).json({ success: false, message: 'Could not find user' });
+      return;
     }
 
     const isValid = await utils.compareStringWithHash(password, user.password);
