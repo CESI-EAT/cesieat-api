@@ -61,6 +61,27 @@ authController.logout = async (req, res, next) => {
   res.status(200).json({ success: true, message: 'Bye bye' });
 };
 
+authController.changePassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.scope('withPassword').findOne({ where: { id: req.user.id } });
+    const isValid = await utils.compareStringWithHash(currentPassword, user.password);
+    if (isValid) {
+      const new_password_hashed = await utils.hashString(newPassword);
+      const user = await User.findOne({
+        where: { id: req.user.id },
+      });
+      Object.assign(user, { password: new_password_hashed });
+      await user.save();
+      res.status(200).json({ success: true, message: 'Your password has been  updated !' });
+    } else {
+      res.status(401).json({ success: false, message: 'Your entered the wrong password !' });
+    }
+  } catch (err) {
+    res.status(401).json({ success: false, message: err.message });
+  }
+};
+
 authController.getProfile = async (req, res, next) => {
   const user = await User.findOne({
     where: { id: req.user.id },
