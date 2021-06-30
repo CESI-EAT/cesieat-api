@@ -34,10 +34,10 @@ userController.createUser = async (req, res) => {
 
 userController.updateUser = async (req, res) => {
   try {
-    const user = await User.find({ where: { id: req.params.id } });
+    const user = await User.findOne({ where: { id: req.params.id } });
     Object.assign(user, req.body);
     await user.save();
-    res.status(200).json({ success: true, message: 'Updated with success' });
+    res.status(200).json({ success: true, user, message: 'Updated with success' });
   } catch (err) {
     console.log(err);
     throw err;

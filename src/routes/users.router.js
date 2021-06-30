@@ -12,7 +12,7 @@ router.get('/:id', userController.findUser);
 router.post('/', convertImage, userController.createUser);
 
 /* Update user */
-router.patch('/', userController.updateUser);
+router.patch('/:id', userController.updateUser);
 
 /* Delete one user based on ID */
 router.delete('/:id', userController.deleteUser);

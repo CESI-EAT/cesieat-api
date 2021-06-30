@@ -12,7 +12,12 @@ require('../config/passport')(passport);
 
 const app = express();
 var corsOptions = {
-  origin: ['https://localhost:9377', 'https://app.morse-messenger.com', 'http://localhost:8080'],
+  origin: [
+    'https://localhost:9377',
+    'https://app.morse-messenger.com',
+    'http://localhost:8080',
+    'http://127.0.0.1:8080',
+  ],
   credentials: true,
 };
 app.use(cors(corsOptions));
