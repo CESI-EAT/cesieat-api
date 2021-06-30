@@ -69,7 +69,7 @@ const { convertImage } = require('../middlewares/images.middleware');
  *            description: Special insctruction destinated to the delivery man
  *            example: come in moonwalk
  *          price:
- *            type: float
+ *            type: double
  *            description: order's prices
  *            example: 420.69
  *          articles:
