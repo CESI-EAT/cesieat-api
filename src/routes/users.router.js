@@ -37,54 +37,6 @@ const { convertImage } = require('../middlewares/images.middleware');
  *              type: integer
  *              description: The user ID.
  *              example: 0
- *      Order:
- *        type: object
- *        properties:
- *          id:
- *            type: string
- *            description: The order ID.
- *            example: 0
- *          userId:
- *            type: integer
- *            description: The user ID.
- *            example: 1
- *          storeId:
- *            type: string
- *            description: The store ID.
- *            example: 2
- *          deliveryManId:
- *            type: string
- *            description: The delivery man ID.
- *            example: 3
- *          deliverTime:
- *            type: date-time
- *            description: The delivery man ID.
- *            example: YYYY-MM-DDThh:mm:ss.sTZD
- *          interactionType:
- *            type: string
- *            description: Type of interaction wanted by the user with the delivery man
- *            example: from far away, like, with a stick or something
- *          specialInstructions:
- *            type: string
- *            description: Special insctruction destinated to the delivery man
- *            example: come in moonwalk
- *          price:
- *            type: double
- *            description: order's prices
- *            example: 420.69
- *          articles:
- *            type: array
- *            items:
- *              type: object
- *              properties:
- *                id:
- *                  type: integer
- *                  description: articles id
- *                  example: 2
- *                quantity:
- *                  type: integer
- *                  description: articles quantity
- *                  example: 3
  *
  * /users/:
  *   get:
