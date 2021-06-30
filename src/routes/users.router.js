@@ -1,11 +1,11 @@
 const express = require('express');
-const userController = require('../controllers/userController');
+const userController = require('../controllers/users.controller');
 const router = express.Router();
 const { convertImage } = require('../middlewares/images.middleware');
 
 /**
  * @swagger
- * /tags:
+ * /users:
  *  get:
  *    summary: Retrieve a list of JSON user
  *    description: Retrieve the complete list of tags descripting the stores for search purpose
@@ -29,7 +29,7 @@ const { convertImage } = require('../middlewares/images.middleware');
  *                       name:
  *                         type: string
  *                         description: tag's name
- *                         example: italien
+ *                         example: jonh
  */
 router.get('/', userController.findAll);
 
