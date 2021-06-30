@@ -26,6 +26,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "sequelize": "^6.6.4",
+    "stripe": "^8.158.0",
     "tedious": "^11.0.9"
   },
   "devDependencies": {
