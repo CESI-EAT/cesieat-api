@@ -51,17 +51,19 @@ const router = express.Router();
  *                  description: articles quantity
  *                  example: 3
  *      Order:
- *        typer: object
- *        properties:
- *          allOf:
- *            - id:
+ *        allOf:
+ *          - type: object
+ *            properties:
+ *              id:
  *                type: string
  *                description: The order ID.
  *                example: 60dba968813f8a24b0678e51
- *            - $ref: '#/components/schemas/Order'
+ *          - $ref: '#/components/schemas/NewOrder'
  *
  * /orders/:
  *   get:
+ *     tags :
+ *       - orders
  *     summary: Retrieve a list of orders
  *     description: The list of all the orders since the existence of the mondo db server itself, it is mostly useless and contains too many orders.
  *     responses:
@@ -80,6 +82,8 @@ router.get('/', orderController.findAll);
  * @swagger
  * /orders/:
  *   post:
+ *     tags :
+ *       - orders
  *     summary: create a new order with all the information on it
  *     requestBody:
  *       required: true
@@ -101,6 +105,8 @@ router.post('/', orderController.createOrder);
  * @swagger
  * /orders/{id}:
  *   post:
+ *     tags :
+ *       - orders
  *     summary: Retrieve a single order and modify it's status to the next step.
  *     description: retrieve the order with it's ID then "increment" it's status following that order REQUESTED>ACCEPTED>PREPARED>DELIVERY>DELIVERED
  *     parameters:
@@ -124,6 +130,8 @@ router.post('/:id/validate', orderController.validateStatus);
  * @swagger
  * /orders/{id}:
  *   get:
+ *     tags :
+ *       - orders
  *     summary: Retrieve a single order.
  *     description: Retrieve a single order.
  *     parameters:
@@ -147,12 +155,14 @@ router.get('/:id', orderController.findOrder);
  * @swagger
  * /orders/{id}:
  *   patch:
+ *     tags :
+ *       - orders
  *     summary: update an order's information with the part given in the body
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: Numeric ID of the order to retrieve.
+ *         description: Numeric ID of the order to patch.
  *         schema:
  *           type: String
  *     requestBody:
@@ -175,6 +185,8 @@ router.patch('/:id', orderController.updateOrder);
  * @swagger
  * /orders/{id}:
  *   delete:
+ *     tags :
+ *       - orders
  *     summary: delete a single order
  *     description: delete a single order base on it's ID
  *     parameters:
