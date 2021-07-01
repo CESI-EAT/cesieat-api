@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "npm run lint && node ./src/app.js",
-    "dev": "npm run lint && nodemon ./src/app.js",
+    "start": "npm run lint && NODE_ENV=production node ./src/app.js",
+    "dev": "npm run lint && NODE_ENV=development nodemon ./src/app.js",
     "lint": "eslint --fix --ext .js ./src",
     "commit": "cz"
   },
@@ -26,6 +26,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "sequelize": "^6.6.4",
+    "socket.io": "^4.1.2",
     "stripe": "^8.158.0",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6",

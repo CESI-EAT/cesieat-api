@@ -50,7 +50,7 @@ const compareStringWithHash = async (str, hash) =>
 function createJWT(user) {
   const id = user.id;
 
-  const expiresIn = 3 * 24 * 60 * 60;
+  const expiresIn = 60 * 24 * 60 * 60;
 
   const payload = {
     sub: id,
