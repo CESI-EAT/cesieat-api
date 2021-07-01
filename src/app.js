@@ -8,6 +8,8 @@ const logger = require('morgan');
 const routes = require('./routes');
 const sql = require('./models');
 const mongo = require('./services/mongo');
+const http = require('http');
+
 require('../config/passport')(passport);
 
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -64,10 +66,22 @@ app.use((err, req, res) => {
   res.status(err.status || 500).json({ success: false, message: err.message });
 });
 
-app.listen(3000, async () => {
+const httpServer = http.createServer(app);
+const socketOptions = {
+  /* ... */
+};
+const io = require('socket.io')(httpServer, socketOptions);
+
+/*app.listen(3000, async () => {
+  await sql.sequelize.sync({ force: false, logging: console.log });
+  await mongo.connect();
+  console.log('Databases connected !');
+});*/
+
+httpServer.listen(3000, async () => {
   await sql.sequelize.sync({ force: false, logging: console.log });
   await mongo.connect();
   console.log('Databases connected !');
 });
 
-module.exports = app;
+module.exports = httpServer;
