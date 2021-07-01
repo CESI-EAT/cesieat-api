@@ -8,6 +8,12 @@ const logger = require('morgan');
 const routes = require('./routes');
 const sql = require('./models');
 const mongo = require('./services/mongo');
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
 require('../config/passport')(passport);
 
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -64,10 +70,38 @@ app.use((err, req, res) => {
   res.status(err.status || 500).json({ success: false, message: err.message });
 });
 
-app.listen(3000, async () => {
+const key = fs.readFileSync('src/ssl/privkey1.pem', 'utf8');
+const cert = fs.readFileSync('src/ssl/cert1.pem', 'utf8');
+
+const credentials = {
+  key,
+  cert,
+};
+
+const hServer =
+  process.env.NODE_ENV === 'development'
+    ? http.createServer(app)
+    : https.createServer(credentials, app);
+
+const socketOptions = {
+  /* ... */
+};
+const io = require('socket.io')(hServer, socketOptions);
+
+const { configureSocket } = require('./services/socket.js');
+configureSocket(io);
+
+/*app.listen(3000, async () => {
   await sql.sequelize.sync({ force: false, logging: console.log });
   await mongo.connect();
   console.log('Databases connected !');
+});*/
+
+hServer.listen(3000, async () => {
+  await sql.sequelize.sync({ force: false, logging: console.log });
+  await mongo.connect();
+  console.log('Databases connected !');
+  console.log('NODE_ENV', process.env.NODE_ENV);
 });
 
-module.exports = app;
+module.exports = hServer;
