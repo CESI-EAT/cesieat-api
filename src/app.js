@@ -8,7 +8,11 @@ const logger = require('morgan');
 const routes = require('./routes');
 const sql = require('./models');
 const mongo = require('./services/mongo');
+const fs = require('fs');
 const http = require('http');
+const https = require('https');
+
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
 require('../config/passport')(passport);
 
@@ -66,11 +70,26 @@ app.use((err, req, res) => {
   res.status(err.status || 500).json({ success: false, message: err.message });
 });
 
-const httpServer = http.createServer(app);
+const key = fs.readFileSync('src/ssl/privkey1.pem', 'utf8');
+const cert = fs.readFileSync('src/ssl/cert1.pem', 'utf8');
+
+const credentials = {
+  key,
+  cert,
+};
+
+const hServer =
+  process.env.NODE_ENV === 'development'
+    ? http.createServer(app)
+    : https.createServer(credentials, app);
+
 const socketOptions = {
   /* ... */
 };
-const io = require('socket.io')(httpServer, socketOptions);
+const io = require('socket.io')(hServer, socketOptions);
+
+const { configureSocket } = require('./services/socket.js');
+configureSocket(io);
 
 /*app.listen(3000, async () => {
   await sql.sequelize.sync({ force: false, logging: console.log });
@@ -78,10 +97,11 @@ const io = require('socket.io')(httpServer, socketOptions);
   console.log('Databases connected !');
 });*/
 
-httpServer.listen(3000, async () => {
+hServer.listen(3000, async () => {
   await sql.sequelize.sync({ force: false, logging: console.log });
   await mongo.connect();
   console.log('Databases connected !');
+  console.log('NODE_ENV', process.env.NODE_ENV);
 });
 
-module.exports = httpServer;
+module.exports = hServer;
