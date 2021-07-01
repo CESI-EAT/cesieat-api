@@ -9,9 +9,10 @@ const OrderSchema = new Schema({
     required: true,
     unique: false,
   },
-  storeId: {
+  madeBy: {
     type: ObjectID,
     required: true,
+    ref: 'Store',
     unique: false,
   },
   deliveryManId: {
@@ -20,7 +21,7 @@ const OrderSchema = new Schema({
   },
   status: {
     type: String,
-    required: true,
+    default: 'REQUESTED',
   },
   deliveryAddress: {
     type: String,
@@ -42,7 +43,7 @@ const OrderSchema = new Schema({
     type: Number,
     required: true,
   },
-  articles: {
+  products: {
     type: Array,
     required: true,
   },

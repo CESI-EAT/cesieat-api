@@ -1,4 +1,6 @@
 const Order = require('../models/Order');
+const { User } = require('../models');
+
 const orderController = {};
 const orderState = ['REQUESTED', 'ACCEPTED', 'PREPARED', 'DELIVERY', 'DELIVERED'];
 
@@ -32,8 +34,14 @@ orderController.createOrder = async (req, res) => {
 
 orderController.findOrder = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
-    res.status(200).json(order);
+    const order = await Order.findById(req.params.id).populate('madeBy');
+    const user = await User.findOne({ where: { id: order.userId } }).then((u) => u?.get());
+    let deliver = null;
+    if (order.deliverManId)
+      deliver = await User.findOne({ where: { id: order.deliverManId } }).then((u) => u?.get());
+    res
+      .status(200)
+      .json(Object.assign({ orderedBy: user, deliveredBy: deliver }, order.toObject()));
   } catch (err) {
     res.status(401).json({ success: false, message: err.message });
   }
