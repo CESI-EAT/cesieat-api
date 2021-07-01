@@ -30,8 +30,7 @@
     "stripe": "^8.158.0",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6",
-    "tedious": "^11.0.9",
-    "win-node-env": "^0.4.0"
+    "tedious": "^11.0.9"
   },
   "devDependencies": {
     "commitizen": "^4.2.4",
