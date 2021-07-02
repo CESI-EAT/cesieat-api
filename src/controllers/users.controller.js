@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Role } = require('../models');
 const Order = require('../models/Order');
 const userController = {};
 
@@ -23,13 +23,22 @@ userController.findUser = async (req, res) => {
 
 userController.getOrders = async (req, res) => {
   try {
-    const user = await User.findOne({ where: { id: req.params.id } });
-    if (user === null) res.status(401).json({ success: false, message: 'User not found !' });
-
-    const orders = await Order.find({
-      status: 'DELIVERED',
-      $or: [{ 'deliveredBy.id': req.params.id }, { 'orderedBy.id': req.params.id }],
+    const user = await User.findOne({
+      where: { id: req.params.id },
+      include: [{ model: Role, as: 'role' }],
     });
+    if (user === null) res.status(401).json({ success: false, message: 'User not found !' });
+    const filter = {};
+    filter.status = 'DELIVERED';
+    if (user.role.name === 'Consommateur') filter['orderedBy.id'] = parseInt(req.params.id);
+    if (user.role.name === 'Livreur') filter['deliveredBy.id'] = parseInt(req.params.id);
+    const filterPopulate = {};
+    if (user.role.name === 'Restaurateur') {
+      filterPopulate.path = 'madeBy';
+      filterPopulate.match = { userId: req.params.id };
+    }
+
+    const orders = await Order.find(filter).populate(filterPopulate);
 
     res.status(200).json(orders);
   } catch (err) {

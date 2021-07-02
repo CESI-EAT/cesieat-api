@@ -28,7 +28,6 @@ orderController.findAll = async (req, res) => {
       filter['orderedBy.id'] = req.user.id;
       filter.status = { $ne: 'DELIVERED' };
     }
-    console.log('filter: ', filter);
     const orders = await Order.find(filter).populate('madeBy');
     res.status(200).json(orders);
   } catch (err) {
