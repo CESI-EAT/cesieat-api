@@ -1,4 +1,5 @@
 const utils = require('../services/utils');
+const Order = require('../models/Order');
 const { User, Role, Log } = require('../models');
 const authController = {};
 
@@ -52,6 +53,24 @@ authController.login = async (req, res, next) => {
     }
   } catch (err) {
     return next(err);
+  }
+};
+
+authController.getMyOrder = async (req, res) => {
+  try {
+    const filter = {};
+    filter.status = { $ne: 'DELIVERED' };
+    if (req.user.role.name === 'Consommateur') filter['orderedBy.id'] = req.user.id;
+    if (req.user.role.name === 'Livreur') filter['deliveredBy.id'] = req.user.id;
+    const order = await Order.findOne(filter).populate('madeBy');
+    if (!order) {
+      res.status(401).json({ success: false, message: 'Order not found' });
+      return null;
+    }
+
+    res.status(200).json(order);
+  } catch (err) {
+    res.status(401).json({ success: false, message: err.message });
   }
 };
 
