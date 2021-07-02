@@ -4,18 +4,28 @@ const storeController = {};
 storeController.findAll = async (req, res) => {
   try {
     //Query to find a stores based on it's name, adress, city, postal, or code
-    if (req.query && req.query.search) {
+
+    if (req.query && req.query.search && req.query['price-range']) {
+      const priceRange = parseInt(req.query['price-range']);
       const regex = new RegExp(`${req.query.search}`, 'i');
-      const store = await Store.find({
+      const stores = await Store.find({
+        $and: [
+          { $or: [{ name: regex }, { address: regex }, { city: regex }, { postalCode: regex }] },
+          { priceRange: { $lte: priceRange } },
+        ],
+      });
+      res.status(200).json(stores);
+    } else if (req.query && req.query.search) {
+      const regex = new RegExp(`${req.query.search}`, 'i');
+      const stores = await Store.find({
         $or: [{ name: regex }, { address: regex }, { city: regex }, { postalCode: regex }],
       }).exec();
-      console.log(regex);
-      res.status(200).json(store);
+      res.status(200).json(stores);
     }
     //Query to find stores with a price range lower than given
     else if (req.query && req.query['price-range']) {
       const priceRange = parseInt(req.query['price-range']);
-      const store = await Store.find({ priceRange: { $lt: priceRange } });
+      const store = await Store.find({ priceRange: { $lte: priceRange } });
       res.status(200).json(store);
     }
     //Else fin all

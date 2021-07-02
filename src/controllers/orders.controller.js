@@ -1,4 +1,6 @@
 const Order = require('../models/Order');
+const { User } = require('../models');
+
 const orderController = {};
 const orderState = ['REQUESTED', 'ACCEPTED', 'PREPARED', 'DELIVERY', 'DELIVERED'];
 
@@ -30,7 +32,7 @@ orderController.findAllByDay = async (req, res) => {
 
 orderController.findAll = async (req, res) => {
   try {
-    const orders = await Order.find();
+    const orders = await Order.find().populate('madeBy');
     res.status(200).json(orders);
   } catch (err) {
     res.status(401).json({ success: false, message: err.message });
@@ -39,8 +41,8 @@ orderController.findAll = async (req, res) => {
 
 orderController.createOrder = async (req, res) => {
   try {
-    const order = await Order.create(req.body);
-    res.status(200).json(order);
+    const order = await Order.create({ ...req.body, orderedBy: req.user.dataValues });
+    res.status(201).json(order);
   } catch (err) {
     res.status(401).json({ success: false, message: err.message });
   }
@@ -48,7 +50,7 @@ orderController.createOrder = async (req, res) => {
 
 orderController.findOrder = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('madeBy');
     res.status(200).json(order);
   } catch (err) {
     res.status(401).json({ success: false, message: err.message });
@@ -76,7 +78,11 @@ orderController.deleteOrder = async (req, res) => {
 orderController.validateStatus = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
-    Object.assign(order, { status: getNextStatus(order.status) });
+    if (order.status === 'PREPARED') {
+      order.deliveryManId = req.user.id;
+      order.deliveredBy = req.user;
+    }
+    order.status = getNextStatus(order.status);
     await order.save();
     res.status(200).json({ success: true, order });
   } catch (err) {
