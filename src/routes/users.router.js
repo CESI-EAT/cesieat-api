@@ -32,14 +32,18 @@ const { convertImage } = require('../middlewares/images.middleware');
  *            example: 3
  *      User:
  *        allOf:
- *          - $ref: '#/components/schemas/User'
- *          - id:
- *              type: integer
- *              description: The user ID.
- *              example: 0
+ *          - type: object
+ *            properties:
+ *              id:
+ *                type: integer
+ *                description: The user ID.
+ *                example: 0
+ *          - $ref: '#/components/schemas/NewUser'
  *
  * /users/:
  *   get:
+ *     tags :
+ *       - users
  *     summary: Retrieve a list of users
  *     description: Retrieve the complete list of tags descripting the stores for search purpose
  *     responses:
@@ -58,6 +62,8 @@ router.get('/', userController.findAll);
  * @swagger
  * /users/{id}:
  *   get:
+ *     tags :
+ *       - users
  *     summary: Retrieve a single user.
  *     description: Retrieve a single user.
  *     parameters:
@@ -81,6 +87,9 @@ router.get('/:id', userController.findUser);
  * @swagger
  * /users/{id}/orders:
  *   get:
+ *     tags :
+ *       - orders
+ *       - users
  *     summary: Retrieve a single user.
  *     description: Retrieve a single user.
  *     parameters:
@@ -106,6 +115,8 @@ router.get('/:id/orders', userController.getOrders);
  * @swagger
  * /users/:
  *   post:
+ *     tags :
+ *       - users
  *     summary: create a new user with all the information on it
  *     requestBody:
  *       required: true
@@ -127,6 +138,8 @@ router.post('/', convertImage, userController.createUser);
  * @swagger
  * /users/{id}:
  *   patch:
+ *     tags :
+ *       - users
  *     summary: update a user's information with the part given in the body
  *     parameters:
  *       - in: path
@@ -155,6 +168,8 @@ router.patch('/:id', userController.updateUser);
  * @swagger
  * /users/{id}:
  *   delete:
+ *     tags :
+ *       - users
  *     summary: delete a single user
  *     description: delete a single user base on it's ID
  *     parameters:

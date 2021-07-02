@@ -6,6 +6,8 @@ const router = express.Router();
  * @swagger
  * /tags:
  *  get:
+ *    tags :
+ *      - tags
  *    summary: Retrieve a list of tags
  *    description: Retrieve the complete list of tags descripting the stores for search purpose
  *    responses:
