@@ -7,8 +7,7 @@ userController.findAll = async (req, res) => {
     const users = await User.findAll();
     res.status(200).json(users);
   } catch (err) {
-    console.log(err);
-    throw err;
+    res.status(401).json({ success: false, message: err });
   }
 };
 
@@ -18,8 +17,7 @@ userController.findUser = async (req, res) => {
     if (user === null) res.status(401).json({ success: false, message: 'User not found !' });
     res.status(200).json(user);
   } catch (err) {
-    console.log(err);
-    throw err;
+    res.status(401).json({ success: false, message: err });
   }
 };
 
@@ -34,8 +32,7 @@ userController.getOrders = async (req, res) => {
 
     res.status(200).json(orders);
   } catch (err) {
-    console.log(err);
-    throw err;
+    res.status(401).json({ success: false, message: err });
   }
 };
 
@@ -44,20 +41,18 @@ userController.createUser = async (req, res) => {
     const user = await User.create(req.body);
     res.status(200).json({ success: true, user });
   } catch (err) {
-    console.log(err);
-    throw err;
+    res.status(401).json({ success: false, message: err });
   }
 };
 
 userController.updateUser = async (req, res) => {
   try {
-    const user = await User.find({ where: { id: req.params.id } });
+    const user = await User.findOne({ where: { id: req.params.id } });
     Object.assign(user, req.body);
     await user.save();
-    res.status(200).json({ success: true, message: 'Updated with success' });
+    res.status(200).json({ success: true, user, message: 'Updated with success' });
   } catch (err) {
-    console.log(err);
-    throw err;
+    res.status(401).json({ success: false, message: err });
   }
 };
 
@@ -66,8 +61,7 @@ userController.deleteUser = async (req, res) => {
     await User.destroy({ where: { id: req.params.id } });
     res.status(200).json({ success: true, message: 'Deleted with success' });
   } catch (err) {
-    console.log(err);
-    throw err;
+    res.status(401).json({ success: false, message: err });
   }
 };
 
