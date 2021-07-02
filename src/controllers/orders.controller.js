@@ -12,6 +12,22 @@ const getNextStatus = (status) => {
   }
 };
 
+orderController.findAllByDay = async (req, res) => {
+  try {
+    const estimate = await Order.estimatedDocumentCount();
+    const orders = await Order.find();
+    console.log(`Estimated number of documents in the orders collection: ${estimate}`);
+    console.log(orders[0].createdAt);
+    const query = { createdAt: '2021-07-01' };
+    const orderCount = await Order.countDocuments(query);
+
+    console.log('order count : ' + orderCount);
+    res.status(200).json(orderCount);
+  } catch (err) {
+    res.status(401).json({ success: false, message: err.message });
+  }
+};
+
 orderController.findAll = async (req, res) => {
   try {
     const orders = await Order.find();

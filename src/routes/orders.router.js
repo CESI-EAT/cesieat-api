@@ -5,6 +5,9 @@ const router = express.Router();
 /* GET order listing. */
 router.get('/', orderController.findAll);
 
+/* GET order count by day. */
+router.get('/days', orderController.findAllByDay);
+
 /* POST order. */
 router.post('/', orderController.createOrder);
 
