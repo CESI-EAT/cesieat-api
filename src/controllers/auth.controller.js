@@ -83,11 +83,7 @@ authController.changePassword = async (req, res, next) => {
 };
 
 authController.getProfile = async (req, res, next) => {
-  const user = await User.findOne({
-    where: { id: req.user.id },
-    include: [{ model: Role, as: 'role' }],
-  });
-  res.json(user);
+  res.json(req.user);
 };
 
 authController.getRoles = async (req, res) => {

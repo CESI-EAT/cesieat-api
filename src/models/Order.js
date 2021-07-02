@@ -16,8 +16,8 @@ const OrderSchema = new Schema(
       ref: 'Store',
       unique: false,
     },
-    deliveryManId: {
-      type: Number,
+    deliveredBy: {
+      type: Object,
       unique: false,
     },
     status: {

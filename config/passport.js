@@ -1,5 +1,5 @@
 const JWTstrategy = require('passport-jwt').Strategy;
-const { User } = require('../src/models');
+const { User, Role } = require('../src/models');
 
 /*const pathToKey = path.join(__dirname, '..', 'id_rsa_pub_pem');
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');*/
@@ -18,7 +18,10 @@ const options = {
 };
 
 const strategy = new JWTstrategy(options, (payload, done) => {
-  User.findOne({ where: { id: payload.sub } })
+  User.findOne({
+    where: { id: payload.sub },
+    include: [{ model: Role, as: 'role' }],
+  })
     .then((user) => {
       if (user) {
         return done(null, user);

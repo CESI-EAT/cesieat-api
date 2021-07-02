@@ -1,5 +1,6 @@
 const Order = require('../models/Order');
 const { User } = require('../models');
+const Store = require('../models/Store');
 
 const orderController = {};
 const orderState = ['REQUESTED', 'ACCEPTED', 'PREPARED', 'DELIVERY', 'DELIVERED'];
@@ -16,7 +17,19 @@ const getNextStatus = (status) => {
 
 orderController.findAll = async (req, res) => {
   try {
-    const orders = await Order.find().populate('madeBy');
+    let filter = {};
+    if (req.user.role.name === 'Restaurateur') {
+      const store = await Store.findOne({ userId: req.user.id });
+      filter.madeBy = store.id;
+      filter.status = { $ne: 'DELIVERED' };
+    } else if (req.user.role.name === 'Livreur') {
+      filter.status = { $in: ['PREPARED', 'DELIVERY'] };
+    } else {
+      filter['orderedBy.id'] = req.user.id;
+      filter.status = { $ne: 'DELIVERED' };
+    }
+    console.log('filter: ', filter);
+    const orders = await Order.find(filter).populate('madeBy');
     res.status(200).json(orders);
   } catch (err) {
     res.status(401).json({ success: false, message: err.message });
@@ -61,12 +74,13 @@ orderController.deleteOrder = async (req, res) => {
 
 orderController.validateStatus = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('madeBy');
     if (order.status === 'PREPARED') {
       order.deliveryManId = req.user.id;
-      order.deliveredBy = req.user;
+      order.deliveredBy = req.user.dataValues;
     }
     order.status = getNextStatus(order.status);
+    console.log('order: ', order);
     await order.save();
     res.status(200).json({ success: true, order });
   } catch (err) {

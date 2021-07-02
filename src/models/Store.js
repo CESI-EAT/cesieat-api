@@ -46,6 +46,10 @@ const StoreSchema = new Schema({
   tags: {
     type: Array,
   },
+  userId: {
+    type: Number,
+    required: true,
+  },
 });
 
 const StoreModel = mongoose.model('Store', StoreSchema);

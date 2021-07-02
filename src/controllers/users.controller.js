@@ -27,8 +27,9 @@ userController.getOrders = async (req, res) => {
     if (user === null) res.status(401).json({ success: false, message: 'User not found !' });
 
     const orders = await Order.find({
-      $or: [{ userId: req.params.id }, { deliveryManId: req.params.id }],
-    }).exec();
+      status: 'DELIVERED',
+      $or: [{ 'deliveredBy.id': req.params.id }, { 'orderedBy.id': req.params.id }],
+    });
 
     res.status(200).json(orders);
   } catch (err) {
