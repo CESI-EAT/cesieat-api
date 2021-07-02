@@ -33,8 +33,8 @@ userController.getOrders = async (req, res) => {
     if (user.role.name === 'Consommateur') filter['orderedBy.id'] = parseInt(req.params.id);
     if (user.role.name === 'Livreur') filter['deliveredBy.id'] = parseInt(req.params.id);
     const filterPopulate = {};
+    filterPopulate.path = 'madeBy';
     if (user.role.name === 'Restaurateur') {
-      filterPopulate.path = 'madeBy';
       filterPopulate.match = { userId: req.params.id };
     }
 
