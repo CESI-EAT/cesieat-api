@@ -7,7 +7,11 @@ authController.register = async (req, res, next) => {
   const { password } = req.body;
   const password_hashed = await utils.hashString(password);
   User.create({ ...req.body, password: password_hashed })
-    .then((user) => {
+    .then(async (u) => {
+      const user = await User.findOne({
+        where: { id: u.id },
+        include: [{ model: Role, as: 'role' }],
+      });
       const jwt = utils.createJWT(user);
       res.cookie('jwt', jwt.token, { maxAge: jwt.expires });
       res.json({
