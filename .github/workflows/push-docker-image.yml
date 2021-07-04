@@ -19,6 +19,7 @@ jobs:
           touch .env
           echo MONGO_ADMIN=${{ secrets.MONGO_ADMIN }} >> .env
           echo MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} >> .env
+          echo MONGO_URL=${{ secrets.MONGO_URL }} >> .env
           echo SQL_USERNAME=${{ secrets.SQL_USERNAME }} >> .env
           echo SQL_PASSWORD=${{ secrets.SQL_PASSWORD }} >> .env
           echo SQL_HOST=${{ secrets.SQL_HOST }} >> .env
