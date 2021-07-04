@@ -1,12 +1,21 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const database = {};
+
+var options = {
+  user: process.env.MONGO_ADMIN,
+  pass: process.env.MONGO_PASSWORD,
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+};
 
 var DATABASE_URL = 'app.morse-messenger.com';
 
 database.connect = async () => {
-  const url = `mongodb://${DATABASE_URL}/cesieat`;
-  await mongoose.connect(url, { useUnifiedTopology: true, useNewUrlParser: true }).catch((err) => {
+  console.log(options);
+  const url = `mongodb://${DATABASE_URL}/cesieat?authSource=admin`;
+  await mongoose.connect(url, options).catch((err) => {
     console.log('Exiting from thrown error', err);
     process.exit(1);
   });

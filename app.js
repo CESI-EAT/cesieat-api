@@ -5,16 +5,20 @@ const passport = require('passport');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const routes = require('./routes');
-const sql = require('./models');
-const mongo = require('./services/mongo');
+const routes = require('./src/routes');
+const sql = require('./src/models');
+const mongo = require('./src/services/mongo');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
-require('../config/passport')(passport);
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+require('./config/passport')(passport);
 
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -88,14 +92,8 @@ const socketOptions = {
 };
 const io = require('socket.io')(hServer, socketOptions);
 
-const { configureSocket } = require('./services/socket.js');
+const { configureSocket } = require('./src/services/socket.js');
 configureSocket(io);
-
-/*app.listen(3000, async () => {
-  await sql.sequelize.sync({ force: false, logging: console.log });
-  await mongo.connect();
-  console.log('Databases connected !');
-});*/
 
 hServer.listen(3000, async () => {
   await sql.sequelize.sync({ force: false, logging: console.log });
