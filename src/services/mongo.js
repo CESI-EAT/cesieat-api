@@ -10,11 +10,9 @@ var options = {
   useNewUrlParser: true,
 };
 
-var DATABASE_URL = 'app.morse-messenger.com';
-
 database.connect = async () => {
   console.log(options);
-  const url = `mongodb://${DATABASE_URL}/cesieat?authSource=admin`;
+  const url = `mongodb://${process.env.MONGO_URL}?authSource=admin`;
   await mongoose.connect(url, options).catch((err) => {
     console.log('Exiting from thrown error', err);
     process.exit(1);
